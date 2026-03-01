@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import slide1 from "@/assets/slide-1.jpg";
 import slide2 from "@/assets/slide-2.jpg";
 import slide3 from "@/assets/slide-3.jpg";
+import BottomBar from "@/components/BottomBar";
 
 
 const slides = [
@@ -69,46 +70,53 @@ const HeroSlider = () => {
 
       {/* Left panel with diagonal clip */}
       <div className="relative z-10 flex w-full h-full">
-        <div className="relative w-full md:w-[58%] flex items-center">
+        <div className="relative w-full md:w-[58%] flex items-center pb-32 md:pb-12">
           <div
             className="absolute inset-0 gradient-hero-overlay"
             style={{ clipPath: "polygon(0 0, 100% 0, 82% 100%, 0 100%)" }}
-          />
+              />
           <div className="relative z-10 px-6 sm:px-10 md:px-16 py-16 max-w-xl">
-            <p
-              key={`sub-${current}`}
-              className="text-secondary font-semibold uppercase tracking-[0.25em] mb-4 text-xs animate-fade-up"
-            >
-              {slide.subtitle}
-            </p>
+            <div className="flex flex-wrap gap-4 mb-6">
+              {slides.map((s, index) => (
+                <button
+                  key={index}
+                  onClick={() => goTo(index)}
+                  className={`text-[0.7rem] sm:text-xs font-bold uppercase tracking-widest transition-colors text-left ${
+                    index === current ? "text-secondary border-b-2 border-secondary pb-1" : "text-primary-foreground/60 hover:text-primary-foreground"
+                  }`} 
+                >
+                  {s.subtitle}
+                </button>
+              ))}
+            </div>
             <h1
               key={`title-${current}`}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary-foreground leading-tight mb-5 animate-fade-up"
               style={{ animationDelay: "0.12s" }}
             >
-              {slide.title}
+                {slide.title}
             </h1>
             <p
               key={`desc-${current}`}
-              className="text-primary-foreground/70 text-sm md:text-base leading-relaxed mb-8 animate-fade-up"
+              className="text-primary-foreground/70 text-xs sm:text-sm md:text-base leading-relaxed mb-8 animate-fade-up"
               style={{ animationDelay: "0.24s" }}
             >
               {slide.description}
             </p>
             <div
               key={`cta-${current}`}
-              className="flex flex-wrap gap-4 animate-fade-up"
+              className="flex flex-wrap gap-3 sm:gap-4 animate-fade-up"
               style={{ animationDelay: "0.36s" }}
             >
               <a
                 href={slide.cta.href}
-                className="bg-secondary text-secondary-foreground px-7 py-3 rounded-full font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-opacity"
+                className="bg-secondary text-secondary-foreground px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-opacity"
               >
                 {slide.cta.label}
-              </a>
+                </a>
               <a
                 href="#contact"
-                className="border-2 border-primary-foreground/60 text-primary-foreground px-7 py-3 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-primary-foreground/10 transition-colors"
+                className="border-2 border-primary-foreground/60 text-primary-foreground px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-primary-foreground/10 transition-colors"
               >
                 Contactez-nous
               </a>
@@ -120,21 +128,21 @@ const HeroSlider = () => {
       {/* Navigation arrows */}
       <button
         onClick={prev}
-        className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-primary-foreground/40 flex items-center justify-center text-primary-foreground/60 hover:border-primary-foreground hover:text-primary-foreground transition-colors"
+        className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-primary-foreground/40 hidden md:flex items-center justify-center text-primary-foreground/60 hover:border-primary-foreground hover:text-primary-foreground transition-colors"
         aria-label="Précédent"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
       <button
         onClick={next}
-        className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-secondary flex items-center justify-center text-secondary hover:bg-secondary/20 transition-colors"
+        className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-secondary hidden md:flex items-center justify-center text-secondary hover:bg-secondary/20 transition-colors"
         aria-label="Suivant"
       >
         <ChevronRight className="h-5 w-5" />
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+      <div className="absolute bottom-40 md:bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
@@ -149,9 +157,9 @@ const HeroSlider = () => {
 
       {/* Integrated BottomBar */}
       <div className="absolute bottom-0 left-0 right-0 z-30">
+        <BottomBar />
       </div>
     </section>
   );
 };
-
 export default HeroSlider;

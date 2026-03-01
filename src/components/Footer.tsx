@@ -37,7 +37,7 @@ const Footer = () => (
     <div className="border-t border-primary-foreground/10 py-6">
       <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
         <p className="text-primary-foreground/40 text-sm">
-          © {new Date().getFullYear()} Crystal GROUP. Tous droits réservés.
+          © Groupe Cristal 2026. Tous droits réservés.
         </p>
         <p className="text-primary-foreground/30 text-xs">
           Site réalisé par{" "}

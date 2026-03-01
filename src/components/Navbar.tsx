@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, MapPin, Phone, Mail, Clock, Facebook, Twitter, Instagram, Linkedin, ChevronRight } from "lucide-react";
+import { Menu, X, MapPin, Phone, Mail, Clock, Facebook, Twitter, Instagram, Linkedin, ChevronRight, Globe, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-crystal.png";
 
@@ -7,6 +7,12 @@ const subsidiaries = [
   { name: "Horizon TP", url: "/horizon-tp", description: "Travaux Publics" },
   { name: "Maison Solis", url: "/maison-solis", description: "Immobilier" },
   { name: "SE2I", url: "/se2i", description: "Ingénierie" },
+];
+
+const externalLinks = [
+  { name: "horizontp.sn", url: "https://horizontp.sn/" },
+  { name: "maisonsolis.sn", url: "https://maisonsolis.sn/" },
+  { name: "se2i.com", url: "https://www.se2i.com/" },
 ];
 
 const Navbar = () => {
@@ -21,6 +27,16 @@ const Navbar = () => {
     }
   }, [open]);
 
+  const handleSubsidiaryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const url = e.target.value;
+    if (url) window.location.href = url;
+  };
+
+  const handleWebsiteChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const url = e.target.value;
+    if (url) window.open(url, '_blank');
+  };
+
   return (
     <>
       {/* Injection des polices magnifiques */}
@@ -30,29 +46,64 @@ const Navbar = () => {
         h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; }
         
         .glass-card {
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
         .glass-card:hover {
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+          border: 1px solid rgba(255, 255, 255, 0.3);
           box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
       `}</style>
 
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50 shadow-sm transition-all duration-300">
+      <nav className="sticky top-0 z-50 transition-all duration-300 bg-background/95 backdrop-blur-md border-b border-border/50 shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 py-3">
-          <a href="#accueil" className="flex items-center group">
+          <Link to="/" className="flex items-center group">
             <img src={logo} alt="Crystal GROUP" className="h-14 md:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-          </a>
+          </Link>
+
+          {/* Selects Desktop */}
+          <div className="hidden lg:flex items-center gap-4 ml-auto mr-8">
+             <div className="relative group">
+                <select 
+                  onChange={handleSubsidiaryChange}
+                  className="appearance-none bg-transparent font-medium text-sm border rounded-full px-4 py-2 pr-8 focus:outline-none focus:border-secondary cursor-pointer transition-colors text-foreground border-border hover:bg-accent/50"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Nos Filiales</option>
+                  <option value="/horizon-tp">Horizon TP</option>
+                  <option value="/maison-solis">Maison Solis</option>
+                  <option value="/se2i">SE2I</option>
+                </select>
+                <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none rotate-90 text-muted-foreground" />
+             </div>
+
+             <div className="relative group">
+                <select 
+                  onChange={handleWebsiteChange}
+                  className="appearance-none bg-transparent font-medium text-sm border rounded-full px-4 py-2 pr-8 focus:outline-none focus:border-secondary cursor-pointer transition-colors text-foreground border-border hover:bg-accent/50"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Découvrir les sites des filiales</option>
+                  <option value="https://horizontp.sn/">horizontp.sn</option>
+                  <option value="https://maisonsolis.sn/">maisonsolis.sn</option>
+                  <option value="https://www.se2i.com/">se2i.com</option>
+                </select>
+                <Globe className="absolute right-3 top-1/2 -translate-y-1/2 h-3 w-3 pointer-events-none text-muted-foreground" />
+             </div>
+
+             <a href="#contact" className="font-medium text-sm hover:text-secondary transition-colors uppercase tracking-wide text-foreground">
+                Contact
+             </a>
+          </div>
 
           {/* Bouton Burger (Visible sur PC et Mobile) */}
           <button 
             onClick={() => setOpen(true)} 
-            className="text-foreground p-2 hover:bg-accent/50 rounded-full transition-colors z-50" 
+            className="p-2 rounded-full transition-colors z-50 text-foreground hover:bg-accent/50"
             aria-label="Menu"
           >
             <Menu className="h-8 w-8" />
@@ -62,111 +113,100 @@ const Navbar = () => {
 
       {/* Menu Overlay Transparent en Arbre */}
       {open && (
-        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-[20px] flex flex-col items-center justify-center overflow-y-auto animate-in fade-in duration-500">
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex flex-col overflow-y-auto animate-in fade-in duration-300">
           
           {/* Bouton Fermer (Absolu en haut à droite) */}
-          <button 
-            onClick={() => setOpen(false)} 
-            className="absolute top-6 right-6 md:top-10 md:right-10 text-white p-3 hover:bg-white/10 rounded-full transition-all duration-300 z-[101] hover:rotate-90" 
-            aria-label="Fermer"
-          >
-            <X className="h-10 w-10" />
-          </button>
+          <div className="container mx-auto px-4 py-6 flex justify-end">
+            <button 
+              onClick={() => setOpen(false)} 
+              className="text-white p-2 hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90" 
+              aria-label="Fermer"
+            >
+              <X className="h-8 w-8" />
+            </button>
+          </div>
 
-          <div className="w-full max-w-7xl mx-auto px-4 py-8 flex flex-col items-center min-h-screen md:min-h-0 justify-center relative">
-            
-            {/* Racine : Crystal Group */}
-            <div className="flex flex-col items-center animate-in zoom-in duration-700 slide-in-from-top-8">
-              <a href="/" onClick={() => setOpen(false)} className="glass-card p-6 rounded-2xl text-center max-w-xl z-10 group transition-all duration-500 hover:bg-white/10">
-                <img src={logo} alt="Crystal GROUP" className="h-20 mx-auto mb-4 object-contain transition-transform duration-300 group-hover:scale-105" />
-                <h2 className="text-2xl font-bold text-white mb-2 tracking-tight group-hover:text-secondary transition-colors">Crystal GROUP</h2>
-                <p className="text-xs text-white/80 leading-relaxed mb-3 max-w-md mx-auto">
-                  Un holding sénégalais fédérant des entreprises leaders dans les travaux publics, l'immobilier et l'ingénierie. Bâtir l'avenir à travers l'excellence.
-                </p>
-                <p className="text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Holding International</p>
-              </a>
-              {/* Trait vertical racine */}
-              <div className="h-8 w-0.5 bg-gradient-to-b from-white/20 to-transparent"></div>
-            </div>
-
-            {/* Structure des traits (Visible uniquement sur PC/Tablette) */}
-            <div className="hidden md:flex w-full max-w-3xl justify-center relative mb-0.5">
-              {/* Trait horizontal reliant le premier et le dernier enfant */}
-              {/* Les enfants sont à 1/6, 3/6, 5/6 de la largeur. Le trait va de 1/6 à 5/6 */}
-              <div className="absolute top-0 left-[16.66%] right-[16.66%] h-0.5 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="container mx-auto px-4 flex-grow flex flex-col justify-center py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 h-full">
               
-              {/* Traits verticaux descendants vers les enfants */}
-              <div className="w-1/3 flex justify-center"><div className="h-6 w-0.5 bg-gradient-to-b from-white/20 to-white/5"></div></div>
-              <div className="w-1/3 flex justify-center"><div className="h-6 w-0.5 bg-gradient-to-b from-white/20 to-white/5"></div></div>
-              <div className="w-1/3 flex justify-center"><div className="h-6 w-0.5 bg-gradient-to-b from-white/20 to-white/5"></div></div>
+              {/* Col 1: Infos Contact (Gauche) */}
+              <div className="lg:col-span-3 flex flex-col justify-between lg:border-r border-white/10 lg:pr-8 space-y-8 lg:space-y-0">
+                <div>
+                  <h4 className="text-secondary font-bold uppercase tracking-widest text-xs mb-6">GROUPE de Cristal</h4>
+                  <div className="space-y-4 text-sm text-white/80">
+                    <p className="flex items-center gap-3"><MapPin className="h-4 w-4 text-secondary" /> Dakar, Sénégal</p>
+                    <a href="mailto:contact@crystalgroup.sn" className="flex items-center gap-3 hover:text-white transition-colors"><Mail className="h-4 w-4 text-secondary" /> contact@crystalgroup.sn</a>
+                    <a href="tel:+221774995757" className="flex items-center gap-3 hover:text-white transition-colors"><Phone className="h-4 w-4 text-secondary" /> +221 77 499 57 57</a>
+                    <p className="flex items-center gap-3"><Clock className="h-4 w-4 text-secondary" /> Lun - Ven : 8h - 18h</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-white font-bold mb-4">Suivez-nous</h4>
+                  <div className="flex gap-4">
+                    <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Facebook className="w-4 h-4" /></a>
+                    <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Twitter className="w-4 h-4" /></a>
+                    <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Instagram className="w-4 h-4" /></a>
+                    <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Linkedin className="w-4 h-4" /></a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Col 2: Contenu Principal (Centre - Crystal Group & Filiales) */}
+              <div className="lg:col-span-6 flex flex-col justify-center px-0 lg:px-12 space-y-10">
+                <div>
+                  <h2 className="text-4xl md:text-5xl font-playfair font-bold text-white mb-4">Crystal GROUP</h2>
+                  <p className="text-lg text-white/80 leading-relaxed">Un holding sénégalais fédérant des entreprises leaders dans les travaux publics, l'immobilier et l'ingénierie. Bâtir l'avenir à travers l'excellence.</p>
+                  <span className="inline-block mt-4 px-4 py-1 rounded-full border border-secondary text-secondary text-xs font-bold uppercase tracking-wider">Holding International</span>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-secondary mb-2">Nos Filiales</h3>
+                  <div className="grid gap-4">
+                    {subsidiaries.map(sub => (
+                      <Link key={sub.name} to={sub.url} onClick={() => setOpen(false)} className="group flex items-center justify-between p-4 rounded-xl hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
+                        <div>
+                          <h3 className="text-2xl font-bold text-white group-hover:text-secondary transition-colors">{sub.name}</h3>
+                          <p className="text-sm text-white/60">{sub.description}</p>
+                        </div>
+                        <ArrowRight className="text-white/30 group-hover:text-secondary group-hover:translate-x-2 transition-all" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Col 3: Navigation (Droite) */}
+              <div className="lg:col-span-3 flex flex-col lg:border-l border-white/10 lg:pl-8 justify-center space-y-12">
+                <div>
+                  <h4 className="text-secondary font-bold uppercase tracking-widest text-xs mb-8">Navigation</h4>
+                  <ul className="space-y-6 text-2xl font-playfair font-medium text-white">
+                    <li><Link to="/" onClick={() => setOpen(false)} className="hover:text-secondary transition-colors">Accueil</Link></li>
+                    <li><a href="#apropos" onClick={() => setOpen(false)} className="hover:text-secondary transition-colors">À Propos</a></li>
+                    <li><a href="#contact" onClick={() => setOpen(false)} className="hover:text-secondary transition-colors">Contact</a></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="text-secondary font-bold uppercase tracking-widest text-xs mb-6">Découvrir les sites des filiales</h4>
+                  <div className="grid gap-4">
+                    {externalLinks.map((site) => (
+                      <a 
+                        key={site.name} 
+                        href={site.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="glass-card p-4 rounded-xl flex items-center justify-between group transition-all"
+                      >
+                        <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">{site.name}</span>
+                        <Globe className="w-4 h-4 text-secondary group-hover:scale-110 transition-transform" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
             </div>
-
-            {/* Les Filiales (Enfants) */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full max-w-3xl justify-center">
-              {subsidiaries.map((sub, i) => (
-                <div key={sub.name} className="flex-1 flex flex-col items-center animate-in slide-in-from-bottom-12 duration-700" style={{ animationDelay: `${150 + i * 150}ms` }}>
-                  {/* Trait vertical mobile */}
-                  <div className="md:hidden h-6 w-0.5 bg-white/20"></div>
-                  
-                  <Link 
-                    to={sub.url} 
-                    onClick={() => setOpen(false)}
-                    className="glass-card p-4 rounded-xl w-full max-w-[180px] text-center relative overflow-hidden group transition-all duration-500 hover:-translate-y-1"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <h3 className="text-base font-bold text-white mb-1 relative z-10 group-hover:scale-105 transition-transform">{sub.name}</h3>
-                    <p className="text-[10px] text-white/60 font-medium uppercase tracking-wider relative z-10 group-hover:text-white/90 transition-colors">{sub.description}</p>
-                    <div className="mt-2 flex justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
-                        <ChevronRight className="text-secondary w-4 h-4" />
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
-
-            {/* Informations de l'entreprise */}
-            <div className="mt-24 w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-10 text-white/80 animate-in fade-in duration-1000 delay-500 border-t border-white/10 pt-10">
-                <div className="text-center md:text-left space-y-4">
-                    <h4 className="text-xl font-playfair font-bold text-white mb-4">Navigation</h4>
-                    <ul className="space-y-2">
-                        <li><a href="#apropos" onClick={() => setOpen(false)} className="hover:text-secondary transition-colors text-sm uppercase tracking-wide">À Propos</a></li>
-                        <li><a href="#contact" onClick={() => setOpen(false)} className="hover:text-secondary transition-colors text-sm uppercase tracking-wide">Contact</a></li>
-                        <li><a href="#carrieres" onClick={() => setOpen(false)} className="hover:text-secondary transition-colors text-sm uppercase tracking-wide">Carrières</a></li>
-                    </ul>
-                </div>
-
-                <div className="text-center md:text-left space-y-4">
-                    <h4 className="text-xl font-playfair font-bold text-white mb-4">Contact</h4>
-                    <ul className="space-y-3 text-sm">
-                        <li className="flex items-center justify-center md:justify-start gap-3 group">
-                            <MapPin className="w-4 h-4 text-secondary group-hover:scale-110 transition-transform" /> 
-                            <span>Dakar, Sénégal</span>
-                        </li>
-                        <li className="flex items-center justify-center md:justify-start gap-3 group">
-                            <Phone className="w-4 h-4 text-secondary group-hover:scale-110 transition-transform" /> 
-                            <a href="tel:+221774995757" className="hover:text-white transition-colors">+221 77 499 57 57</a>
-                        </li>
-                        <li className="flex items-center justify-center md:justify-start gap-3 group">
-                            <Mail className="w-4 h-4 text-secondary group-hover:scale-110 transition-transform" /> 
-                            <a href="mailto:contact@crystalgroup.sn" className="hover:text-white transition-colors">contact@crystalgroup.sn</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div className="text-center md:text-left space-y-4">
-                    <h4 className="text-xl font-playfair font-bold text-white mb-4">Suivez-nous</h4>
-                    <div className="flex justify-center md:justify-start gap-4">
-                        <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Facebook className="w-4 h-4" /></a>
-                        <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Twitter className="w-4 h-4" /></a>
-                        <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Instagram className="w-4 h-4" /></a>
-                        <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-secondary hover:text-white transition-all duration-300"><Linkedin className="w-4 h-4" /></a>
-                    </div>
-                    <div className="pt-2 flex items-center justify-center md:justify-start gap-2 text-xs text-white/50">
-                        <Clock className="w-3 h-3" /> Lun - Ven : 8h - 18h
-                    </div>
-                </div>
-            </div>
-
           </div>
         </div>
       )}

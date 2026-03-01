@@ -1,4 +1,4 @@
-import { Phone, Mail, Clock, MapPin, Facebook, Linkedin, Instagram, Twitter } from "lucide-react";
+import { Phone, Mail, Clock, MapPin, Facebook, Linkedin, Instagram, Twitter, Award } from "lucide-react";
 
 const TopBar = () => (
   <div className="bg-foreground text-primary-foreground py-3 border-b border-white/10">
@@ -12,6 +12,9 @@ const TopBar = () => (
         </a>
         <span className="flex items-center gap-2 hover:text-secondary transition-colors cursor-default hidden sm:flex">
           <Clock className="h-4 w-4 text-secondary" /> Lun - Ven : 8h - 18h
+        </span>
+        <span className="flex items-center gap-2 text-secondary font-bold uppercase tracking-wider text-xs ml-2">
+          <Award className="h-4 w-4" /> GROUPE de Cristal
         </span>
       </div>
       

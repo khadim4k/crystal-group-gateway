@@ -1,16 +1,15 @@
-import { Briefcase, Calendar, Users, Award } from "lucide-react";
+import { Building2, Calendar, Headphones } from "lucide-react";
 
 const stats = [
-  { icon: Briefcase, value: "150+", label: "Projets Réalisés" },
+  { icon: Building2, value: "3", label: "Filiales Spécialisées" },
   { icon: Calendar, value: "15+", label: "Années d'Expérience" },
-  { icon: Users, value: "500+", label: "Collaborateurs" },
-  { icon: Award, value: "3", label: "Filiales Spécialisées" },
+  { icon: Headphones, value: "24/7", label: "Support technique" },
 ];
 
 const StatsSection = () => (
   <section className="py-20 gradient-primary">
     <div className="container mx-auto px-4">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {stats.map((stat) => (
           <div key={stat.label} className="text-center">
             <stat.icon className="h-8 w-8 text-secondary mx-auto mb-3" />
